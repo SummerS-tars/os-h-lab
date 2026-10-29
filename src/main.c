@@ -5,20 +5,17 @@
 #include <common/string.h>
 
 static volatile bool boot_secondary_cpus = false;
-extern char edata[], end[];
 
 void main()
 {
     if (cpuid() == 0) {
-        /* Clear BSS before initializing kernel services. */
-        memset(edata, 0, (usize)(end - edata));
+        /* @todo: Clear BSS section.*/
 
         smp_init();
         uart_init();
         printk_init();
 
-        /* Print before releasing the secondary CPUs. */
-        printk("Hello, world! (Core 0)\n");
+        /* @todo: Print "Hello, world! (Core 0)" */
 
         arch_fence();
 
@@ -29,8 +26,7 @@ void main()
             ;
         arch_fence();
 
-        /* Each secondary CPU prints its own ID. */
-        printk("Hello, world! (Core %d)\n", (int)cpuid());
+        /* @todo: Print "Hello, world! (Core <core id>)" */
     }
 
     set_return_addr(idle_entry);
